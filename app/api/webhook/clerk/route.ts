@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     return new Response("Invalid webhook", { status: 400 });
   }
 
-  const { id } = evt.data;
+  // const { id } = evt.data;
   const eventType = evt.type;
 
   if (eventType === "user.created") {
@@ -58,8 +58,8 @@ export async function POST(req: Request) {
       clerkId: id,
       email: email_addresses[0]?.email_address,
       username: username!,
-      firstName: first_name,
-      lastName: last_name,
+      firstName: first_name!,
+      lastName: last_name!,
       photo: image_url,
     });
 
@@ -79,10 +79,10 @@ export async function POST(req: Request) {
     const { id, username, first_name, last_name, image_url } = evt.data;
 
     const updated = await updateUser(id, {
-      username: username!,
-      firstName: first_name,
-      lastName: last_name,
-      photo: image_url,
+      username: username!, // Assert that username is not null
+      firstName: first_name!,
+      lastName: last_name!,
+      photo: image_url!,
     });
 
     return NextResponse.json({ message: "User updated", updated });
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
   if (eventType === "user.deleted") {
     const { id } = evt.data;
 
-    const deleted = await deleteUser(id);
+    const deleted = await deleteUser(id!);
 
     return NextResponse.json({ message: "User deleted", deleted });
   }
